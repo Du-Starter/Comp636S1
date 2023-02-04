@@ -1,7 +1,51 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "base.html" %} {% block content %}
 <!-- code in here to display a list of borrowers -->
 <!-- borrowerlist is the variable passed in containing list of loans -->
 
+<!-- style start -->
+<style>
+  tr:hover {
+    background-color: #ffff99;
+  }
+</style>
+<!-- style end  -->
+
+<!-- header start -->
+<h2>Brrower List</h2>
+<h3>Borrowers information in our collection</h3>
+<!-- header end -->
+
+<!-- table with bootstrap -->
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <!-- column names -->
+      <th>BorrowerID</th>
+      <th>First Name</th>
+      <th>Family Name</th>
+      <th>Date of Birth</th>
+      <th>House Number Name</th>
+      <th>Street</th>
+      <th>Town</th>
+      <th>City</th>
+      <th>Postal Code</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <!-- execute for loop statement and organsied the format -->
+      {% for book in borrowerlist %}
+    </tr>
+    <tr>
+      {% for entry in book %}
+      <td>{{entry}}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+    <!-- for loop end -->
+  </tbody>
+</table>
+<!-- table end -->
 
 {% endblock %}

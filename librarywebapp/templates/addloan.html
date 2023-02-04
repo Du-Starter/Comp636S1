@@ -7,6 +7,63 @@
 <!-- name for the book dropdown should be book-->
 <!-- name for the hidden field with date should be loandate -->
 <!-- URL for submission (action) of form should be loan/add -->
+{% extends "base.html" %} {% block content %}
+
+<style>
+  tr:hover {
+    background-color: #ffff99;
+  }
+</style>
+<!-- Style end -->
+
+<!-- header start -->
+<h2>Loan Books Information Centre</h2>
+<h3>
+  A list of books and borrowers
+</h3>
+<!-- header end -->
+<br></br>
+
+<!-- form start, POST as HTTP post transaction -->
+<form action="http://127.0.0.1:5000/loan/add" method="POST">
+
+<!-- Select options from borrower ID -->
+<label for="borrower">Please select your name: </label>
+<select name="borrower" id="borrower" required="required">
+  <!--for loop, combine the 1st column and 2nd column for the SQL database and call the borrowerid  -->
+  
+  {% for borrower in borrowers %}
+  <option value="{{borrower[0]}}">{{borrower[1]}}&nbsp;{{borrower[2]}}</option>
+
+  {% endfor %}
+  <!-- loop end -->
+</select>
+<!--select end -->
+<br></br>
+
+<!-- Select options from book list -->
+<label for="book">Please select your Books: </label>
+<select name="book" id="book" required="required">
+  <!-- for loop, find the book title in the SQL database and call the bookcopyid-->
+  {% for book in books %}
+  <option value="{{book[0]}}">{{book[4]}}</option>
+
+  {% endfor %}
+</select>
+<!-- select end -->
+
+<!-- Hidden date -->
+<input type="hidden" id="loandate" name="loandate" value="{{loandate}}">
+
+<br></br>
+
+<!-- Submit button -->
+<input type="submit">
+<!-- button end -->
+
+</form>
+<!-- form end -->
+{% endblock %}
 
 
 {% endblock %}

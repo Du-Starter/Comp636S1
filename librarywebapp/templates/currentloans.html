@@ -1,7 +1,79 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "base.html" %} {% block content %}
 <!-- code in here to display a list of loans -->
 <!-- loanlist is the variable passed in containing list of loans -->
 
+<!--style to add the hoverable table  -->
+<style>
+  tr:hover {
+    background-color: #ffff99;
+  }
+</style>
+<!-- style end -->
 
+<!-- header start -->
+<h2>Loan History Report</h2>
+<h3>A list of Loan Report</h3>
+<!-- header end -->
+
+<!-- table striped start -->>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Loan Date</th>
+      <th>Status</th>
+      <th>Book Title</th>
+      <th>Author</th>
+      <th>Category</th>
+      <th>Year of Publication</th>
+      <th>Format</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <!-- count id strart from 0 -->
+    {% set currentname = namespace(id = 0) %}
+    <tr>
+      {% for loan in loanlist %}
+      <!-- Set the row to be coloured-->
+      {% if loan[12] == "Audio Book" %}
+    </tr>
+
+    <tr bgcolor="yellow">
+      {% elif loan[12] == "eBook" %}
+    </tr>
+
+    <tr bgcolor="green">
+      {% else %}
+    </tr>
+
+    <tr bgcolor="white">
+      {% endif %}
+
+      <!--Set the name only showed once no matter how many books they borrowed-->
+      {% set name = loan[1] + " " + loan[2] %} {% if currentname.id != loan[0]
+      %}
+      <td>{{name}}</td>
+      {% set currentname.id = loan[0] %} {% else %}
+      <td></td>
+      {% endif %}
+      <td>{{loan[5]}}</td>
+      <!-- change 0 and 1 to "On Loan" and "Returned" -->
+      {% if loan[6] == 0 %}
+      <td>{{"On Loan"}}</td>
+      {% else %}
+      <td>{{"Returned"}}</td>
+      {% endif %}
+      <!--Loading the rest columns-->
+      <td>{{loan[8]}}</td>
+      <td>{{loan[9]}}</td>
+      <td>{{loan[10]}}</td>
+      <td>{{loan[11]}}</td>
+      <td>{{loan[12]}}</td>
+    </tr>
+    {% endfor %}
+    <!-- end for loop -->
+  </tbody>
+</table>
+<!-- end table -->
 {% endblock %}
