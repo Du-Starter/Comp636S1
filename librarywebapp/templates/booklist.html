@@ -1,6 +1,5 @@
 {% extends "base.html" %} {% block content %}
-<!-- code in here to display a list of borrowers -->
-<!-- borrowerlist is the variable passed in containing list of loans -->
+<!-- code in here to display a list of books-->
 
 <!-- style start -->
 <style>
@@ -8,34 +7,30 @@
     background-color: #ffff99;
   }
 </style>
-<!-- style end  -->
+<!-- style end -->
 
 <!-- header start -->
-<h2>Brrower List</h2>
-<h3>Borrowers information in our collection</h3>
+<h2>Book List</h2>
+<h3>A list of all books in our collection</h3>
 <!-- header end -->
 
-<!-- table with bootstrap -->
+<!-- table infor with header names -->
 <table class="table table-striped">
   <thead>
     <tr>
-      <!-- column names -->
-      <th>BorrowerID</th>
-      <th>First Name</th>
-      <th>Family Name</th>
-      <th>Date of Birth</th>
-      <th>House Number Name</th>
-      <th>Street</th>
-      <th>Town</th>
-      <th>City</th>
-      <th>Postal Code</th>
+      <th>Book ID</th>
+      <th>Title</th>
+      <th>Author</th>
+      <th>Type</th>
+      <th>Year of Publication</th>
+      <th>Description</th>
     </tr>
   </thead>
-
+  <!-- table body -->
   <tbody>
+    <!-- execute for loop statement and organsied the format -->
     <tr>
-      <!-- execute for loop statement and organsied the format -->
-      {% for book in borrowerlist %}
+      {% for book in booklist %}
     </tr>
     <tr>
       {% for entry in book %}
@@ -47,5 +42,4 @@
   </tbody>
 </table>
 <!-- table end -->
-
 {% endblock %}
