@@ -49,7 +49,7 @@ def listbooks():
     connection = getCursor()
     connection.execute("""SELECT b.bookid, b.booktitle,b.author,b.category,b.description,l.returned,l.loandate 
     FROM books b JOIN bookcopies bc ON b.bookid=bc.bookid
-	JOIN loans l ON bc.bookcopyid=l.bookcopyid ;""")
+	JOIN loans l ON bc.bookcopyid=l.bookcopyid;""")
     bookList = connection.fetchall()
     print(bookList)
     return render_template("booklist.html", booklist=bookList)
