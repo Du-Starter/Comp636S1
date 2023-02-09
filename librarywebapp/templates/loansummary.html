@@ -1,0 +1,42 @@
+{% extends "shareintern.html" %} {% block content %}
+<!-- style start -->
+<style>
+  tr:hover {
+    background-color: #ffff99;
+  }
+</style>
+<!-- style end -->
+<!--  -->
+<h2>Loan Summary</h2>
+<h3>The Number of times each book has been loaned in total</h3>
+<!-- header end -->
+
+<!-- table with bootstrap -->
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <!-- column names -->
+      <th>Bookid</th>
+      <th>Booktitle</th>
+      <th>Author</th>
+      <th>Most Loan Books</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <!-- execute for loop statement and organsied the format -->
+      {% for loan in loanSummary %}
+    </tr>
+    <tr>
+      {% for entry in loan %}
+      <td>{{entry}}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+    <!-- for loop end -->
+  </tbody>
+</table>
+<!-- table end -->
+
+{% endblock %}

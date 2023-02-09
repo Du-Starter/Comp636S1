@@ -1,0 +1,17 @@
+{% extends "shareintern.html" %} {% block content %}
+<form action="{{ url_for('searchborrowers') }}" method="post">
+  <h2>Search Centre</h2>
+  <img
+    src="https://t3.ftcdn.net/jpg/04/99/34/78/360_F_499347841_IXq0bLOPN4MkKAa71nP3WMQq6LVlgeTO.jpg"
+    class="n3VNCb KAlRDb"
+    style="width: 200px; height: 200px; margin-left: 45%"
+  />
+  <center>
+    <label
+      ><h4><b>Please type the borrower id or name: </b></h4></label
+    >
+    <input name="search" />
+    <input type="submit" />
+  </center>
+</form>
+{% endblock %}

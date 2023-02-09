@@ -1,0 +1,52 @@
+<!-- Username: chend2d -->
+<!-- Student ID: 1154958 -->
+
+{% extends "shareintern.html" %} {% block content %}
+<!-- code in here to display a list of books-->
+
+<!-- style start -->
+<style>
+  tr:hover {
+    background-color: #ffff99;
+  }
+</style>
+<!-- style end -->
+
+<!-- header start -->
+<h2>Book List</h2>
+<h3>A list of all books in our collection</h3>
+<!-- header end -->
+
+<!-- table infor with header names -->
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th hidden>Bookid</th>
+      <th>Title</th>
+      <th>Author</th>
+      <th>Category</th>
+      <th>Description</th>
+      <th>Loan Date</th>
+    </tr>
+  </thead>
+  <!-- table body -->
+  <tbody>
+    <!-- execute for loop statement and organsied the format -->
+    {% for book in staffbooklist %}
+    <tr>
+      <td>{{ book[1] }}</td>
+      <td>{{ book[2] }}</td>
+      <td>{{ book[3] }}</td>
+      <td>{{ book[4] }}</td>
+      {% if book[5]==0 %}
+      <td style="background-color: yellowgreen">Available</td>
+      {% else %}
+      <td style="background-color: rgba(70, 70, 233, 0.993)">{{ book[6] }}</td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+    <!-- for loop end -->
+  </tbody>
+</table>
+<!-- table end -->
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "shareintern.html" %} {% block content %}
+<style>
+  tr:hover {
+    background-color: #ffff99;
+  }
+</style>
+<!-- style end -->
+
+<!-- header start -->
+<h2>Borrower Summary</h2>
+<h3>A list of borrowers and the number of loans in total</h3>
+<!-- header end -->
+
+<!-- table infor with header names -->
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Borrower ID</th>
+      <th>Name</th>
+      <th>Loan Number</th>
+    </tr>
+  </thead>
+  <!-- table body -->
+  <tbody>
+    <!-- execute for loop statement and organsied the format -->
+    <tr>
+      {% for borrower in borrowerSummary %}
+    </tr>
+    <tr>
+      {% for entry in borrower %}
+      <td>{{entry}}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+    <!-- for loop end -->
+  </tbody>
+</table>
+<!-- table end -->
+{% endblock %}

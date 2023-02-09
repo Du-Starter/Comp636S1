@@ -1,3 +1,6 @@
+<!-- Username: chend2d -->
+<!-- Student ID: 1154958 -->
+
 <!DOCTYPE html>
 <!-- Change all the headers to the centre and list to the horizontal in style -->
 <style>
@@ -52,9 +55,12 @@
   </head>
 
   <body>
-    {{ testvar }}
     <nav>
-      <h1>Waikirikiri Library</h1>
+      <h2>
+        <a class="navbar-brand" href="{{ url_for('home') }}"
+          >Waikirikiri Library</a
+        >
+      </h2>
       <div
         class="w3-sidebar w3-light-grey w3-bar-block"
         style="width: 25%"
@@ -62,19 +68,47 @@
       <!-- add class in ul (class allows to select and access specific elements) -->
       <ul class="navi">
         <li>
-          <a href="{{ url_for('listbooks') }}">List Books</a>
+          <a href="{{ url_for('home') }}">Home</a>
         </li>
         <li>
-          <a href="{{ url_for('loanbook') }}">Loan Book</a>
+          <a href="{{ url_for('listbooks') }}">Book List</a>
         </li>
         <li>
-          <a href="{{ url_for('listborrowers') }}">List Borrowers</a>
-        </li>
-        <li>
-          <a href="{{ url_for('currentloans') }}">Current Loans</a>
+          <a href="{{ url_for('search') }}">Search</a>
         </li>
       </ul>
     </nav>
+    <!--  -->
+    <div
+      id="carouselExampleSlidesOnly"
+      class="carousel slide"
+      data-bs-ride="carousel"
+    >
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img
+            src="https://www.selwynlibraries.co.nz/__data/assets/image/0003/453837/IMG_4064.jpg"
+            class="d-block w-100"
+            height="900"
+          />
+        </div>
+        <div class="carousel-item">
+          <img
+            src="https://www.selwynlibraries.co.nz/__data/assets/image/0011/589673/IMG_1394.jpg"
+            class="d-block w-100"
+            height="900"
+          />
+        </div>
+        <div class="carousel-item">
+          <img
+            src="https://www.selwynlibrary.co.nz/wp-content/uploads/2020/10/cropped-cropped-Davis_05092019.jpg"
+            class="d-block w-100"
+            height="900"
+          />
+        </div>
+      </div>
+    </div>
+    <!--  -->
     <section class="content">
       <header>{% block header %}{% endblock %}</header>
       {% for message in get_flashed_messages() %}

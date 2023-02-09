@@ -1,0 +1,42 @@
+{% extends "shareintern.html" %} {% block content %}
+<style>
+  tr:hover {
+    background-color: #ffff99;
+  }
+</style>
+<!-- style end -->
+
+<!-- header start -->
+<h2>Overdue Books Center</h2>
+<h3>A list of all overdue books and their borrowers</h3>
+<!-- header end -->
+
+<!-- table infor with header names -->
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Over Due Days</th>
+      <th>Name</th>
+      <th>Loan Date</th>
+      <th>Due Date</th>
+      <th>Book title</th>
+      <th>Format</th>
+    </tr>
+  </thead>
+  <!-- table body -->
+  <tbody>
+    <!-- execute for loop statement and organsied the format -->
+    <tr>
+      {% for book in overDue %}
+    </tr>
+    <tr>
+      {% for entry in book %}
+      <td>{{entry}}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+    <!-- for loop end -->
+  </tbody>
+</table>
+<!-- table end -->
+{% endblock %}

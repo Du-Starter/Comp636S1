@@ -1,0 +1,43 @@
+{% extends "shareintern.html" %} {% block content %}
+<!-- form start -->
+<h2>Existing Borrower Information Centre</h2>
+<form action="{{ url_for('edit') }}" method="POST" name="borrower">
+   <div class="mb-3">
+    <label for="borrowerid" class="form-label">Borrower ID</label>
+    <input type="number" class="form-control" id="number" name="borrowerid"/>
+   </div>
+  <div class="mb-3">
+    <label for="name" class="form-label">First Name</label>
+    <input type="name" class="form-control" id="newname" name="firstname"/>
+  </div>
+  <div class="mb-3">
+    <label for="name" class="form-label">Family Name</label>
+    <input type="name" class="form-control" id="newname" name="familyname"/>
+  </div>
+  <div class="mb-3">
+    <label for="dateofbirth" class="form-label">Date of Birth</label>
+    <input type="date" class="form-control" id="dateofbirth" type="date" name="dateofbirth"/>
+  </div>
+  <div class="mb-3">
+    <label for="housenumber" class="form-label">House Number</label>
+    <input type="number" class="form-control" id="housenumber" name="housenumber" />
+  </div>
+  <div class="mb-3">
+    <label for="street" class="form-label">Street</label>
+    <input type="street" class="form-control" id="street" name="street" />
+  </div>
+  <div class="mb-3">
+    <label for="town" class="form-label">Town</label>
+    <input type="town" class="form-control" id="town" name="town"/>
+  </div>
+  <div class="mb-3">
+    <label for="city" class="form-label">City</label>
+    <input type="city" class="form-control" id="city" name="city"/>
+  </div>
+  <div class="mb-3">
+    <label for="postalcode" class="form-label">Postal Code</label>
+    <input type="postalcode" class="form-control" id="postalcode" name="postalcode"/>
+<div></div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}
