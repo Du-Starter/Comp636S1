@@ -48,8 +48,8 @@ def home():
 def listbooks():
     connection = getCursor()
     connection.execute("""SELECT b.bookid, b.booktitle,b.author,b.category,b.description,l.returned,l.loandate 
-    FROM books b JOIN bookcopies bc ON b.bookid=bc.bookid
-	JOIN loans l ON bc.bookcopyid=l.bookcopyid;""")
+    FROM library.books b JOIN library.bookcopies bc ON b.bookid=bc.bookid
+	JOIN library.loans l ON bc.bookcopyid=l.bookcopyid ;""")
     bookList = connection.fetchall()
     print(bookList)
     return render_template("booklist.html", booklist=bookList)
@@ -62,8 +62,8 @@ def loanbook():
     connection.execute("SELECT * FROM borrowers;")
     borrowerList = connection.fetchall()
     sql = """SELECT * FROM bookcopies
-inner join books on books.bookid = bookcopies.bookid
- WHERE bookcopyid not in (SELECT bookcopyid from loans where returned <> 1 or returned is NULL);"""
+    inner join books on books.bookid = bookcopies.bookid
+    WHERE bookcopyid not in (SELECT bookcopyid from loans where returned <> 1 or returned is NULL);"""
     connection.execute(sql)
     bookList = connection.fetchall()
     return render_template("addloan.html", loandate=todaydate, borrowers=borrowerList, books=bookList)
@@ -124,13 +124,13 @@ def staff():
 @app.route("/loansummary")
 def loansummary():
     connection = getCursor()
-    sql = """SELECT bookid, booktitle, author, count(loanid) AS MostLoanBooks
-    FROM books
-    LEFT JOIN bookcopies
-    ON books.bookid = bookcopies.bookid
-    LEFT JOIN loans
-    ON loans.bookcopyid = bookcopies.bookcopyid
-    GROUP BY books.bookid,books.booktitle
+    sql = """SELECT library.books.bookid, library.books.booktitle, library.books.author, count(library.loans.loanid) AS MostLoanBooks
+    FROM library.books
+    LEFT JOIN library.bookcopies
+    ON library.books.bookid = library.bookcopies.bookid
+    LEFT JOIN library.loans
+    ON library.loans.bookcopyid = library.bookcopies.bookcopyid
+    GROUP BY library.books.bookid,library.books.booktitle
     ORDER BY MostLoanBooks DESC;"""
     connection.execute(sql)
     loansummary = connection.fetchall()
@@ -201,7 +201,7 @@ def searchstaff():
                        WHERE booktitle LIKE %s OR author LIKE %s""", (booktitle, author,))
     bookList = connection.fetchall()
     print(bookList)
-    return render_template("booklist.html", booklist=bookList)
+    return render_template("staffbooklist.html", booklist=bookList)
 
 
 @app.route("/searchborrower")
@@ -241,10 +241,10 @@ def overdue():
     connection.execute("""
     SELECT (datediff(curdate(),loandate) -28) AS OverDue, concat( br.firstname,+ " " ,+br.familyname ) AS Name, 
     l.loandate AS LoanDate,  DATE_ADD(l.loandate, INTERVAL 28 DAY) AS DueDate, b.booktitle, bc.format 
-    FROM loans l
-    LEFT JOIN bookcopies  bc ON BC.bookcopyid = l.bookcopyid
-    INNER JOIN books  b ON b.bookid = bc.bookid
-    INNER JOIN borrowers br ON br.borrowerid = l.borrowerid
+    FROM library.loans l
+    LEFT JOIN library.bookcopies  bc ON BC.bookcopyid = l.bookcopyid
+    INNER JOIN library.books  b ON b.bookid = bc.bookid
+    INNER JOIN library.borrowers br ON br.borrowerid = l.borrowerid
     WHERE ((bc.format NOT IN ('eBook', 'Audio Book')) AND (l.returned = 0) AND (datediff(curdate(),l.loandate) > 35)); """)
     overdue = connection.fetchall()
     return render_template("overdue.html", overDue=overdue)
@@ -255,8 +255,8 @@ def borrowersummary():
     connection = getCursor()
     connection.execute("""
     SELECT br.borrowerid, concat(br.firstname,+' ',+br.familyname ) AS Name, count(l.loanid) AS LoanNumbers
-    FROM loans l
-    INNER JOIN borrowers br ON br.borrowerid = l.borrowerid
+    FROM library.loans l
+    INNER JOIN library.borrowers br ON br.borrowerid = l.borrowerid
     GROUP BY l.borrowerid
     ORDER BY br.borrowerid; """)
     borrowersummary = connection.fetchall()
@@ -274,7 +274,7 @@ def returnbook():
 def returnloanbook():
     bookcopyid = request.form.get("bookcopyid")
     connection = getCursor()
-    connection.execute("""UPDATE loans l INNER JOIN bookcopies bc
+    connection.execute("""UPDATE library.loans l INNER JOIN bookcopies bc
             ON l.bookcopyid=bc.bookcopyid
             SET returned = 1 WHERE bc.bookcopyid = %s;""", (bookcopyid,))
     print(bookcopyid)
@@ -304,9 +304,12 @@ def borrowerbook():
 def stafflistbooks():
     connection = getCursor()
     connection.execute("""SELECT b.bookid, b.booktitle,b.author,b.category,b.description,l.returned,l.loandate 
-    FROM books b 
-    JOIN bookcopies bc ON b.bookid=bc.bookid
-	JOIN loans l ON bc.bookcopyid=l.bookcopyid ;""")
+    FROM library.books b JOIN library.bookcopies bc ON b.bookid=bc.bookid
+	JOIN library.loans l ON bc.bookcopyid=l.bookcopyid ;""")
     staffbookList = connection.fetchall()
     print(staffbookList)
     return render_template("staffbooklist.html", staffbooklist=staffbookList)
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
