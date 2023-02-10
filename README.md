@@ -7,8 +7,11 @@ This report has two main parts for discussion: the public (/) route and the staf
 
 ##### Public (/)
 On the public page, there are three buttons have been provided for customers to click, including home, booklist, and search. The home button is a standalone route, it does not connect with any database or rely on some other routes. Its purpose is to allow customers to return to the main page as well as to Waikirikiri Library. Both of them have the function of returning to the main page as they have been written in both shareextern.html and base.html in the Visual Studio Code (VS Code). 
-Furthermore, two htmls have been used here since base.html is just a web to show the basic interface with library images animation while shareextern.html is an empty interface to represent the information from customers’ operation. Below are two snapshots to show the differences.  (Images)
-Then the next button is the book list, it is to display the availability of all copies of a book, including the due date. The general method is the same: create a route (/list books) in app.py, write an SQL query and allow it to represent the table when click on it.
+Furthermore, two htmls have been used here since base.html is just a web to show the basic interface with library images animation while shareextern.html is an empty interface to represent the information from customers’ operation. Below are two snapshots to show the differences. It is easy to identify which is good and it is why “shareextern.html” is here.
+![shareextern](/image/shareextern.PNG "booklist in shareextern")
+![base](/image/base.PNG "booklist in base")
+
+Then the next button is the book list, it is to display the availability of all copies of a book, including the due date. The general method is the same: create a route *(/listbooks)* in app.py, write an SQL query and allow it to represent the table when click on it.
 Lastly, the search button allows the public to partially search for book titles and/or authors. A POST method has been used in the back end, as it will submit data to the designated SQL quote for processing, then transfer the results including book title, author, category, and loan status, etc. to booklist.html to present to the public.
 
 ##### Staff(/Staff):
@@ -23,6 +26,7 @@ For me as an example, there are 11 htmls and 24 routes have been created. Borrow
 In the last assignment, I have only encountered POST, and I did not know that POST and GET could be used at the same time, so I also spent some time researching and testing. Fortunately, the result was good (what page display). 
 Furthermore, an example given by Stuart is a SQL statement with one variable while multiple variables have been appeared in the tasks, such as partial searches based on author and book title in the public and staff pages. Author and booktitle are two variables, and the problem is how to combine the example within this task. Here is the work: 
 
+![searchborrower](/image/borrower.PNG "search Borrower")
 
 
 
