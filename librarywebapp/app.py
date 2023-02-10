@@ -48,9 +48,11 @@ def home():
 def listbooks():
     connection = getCursor()
     connection.execute("""SELECT b.bookid, b.booktitle,b.author,b.category,b.description,l.returned,l.loandate 
-    FROM library.books b 
-    INNER JOIN library.bookcopies bc ON b.bookid=bc.bookid
-	INNER JOIN library.loans l ON bc.bookcopyid=l.bookcopyid ;""")
+    FROM books b 
+    INNER JOIN bookcopies bc 
+    ON b.bookid=bc.bookid
+	INNER JOIN loans l 
+    ON bc.bookcopyid=l.bookcopyid ;""")
     bookList = connection.fetchall()
     print(bookList)
     return render_template("booklist.html", booklist=bookList)  # booklist.html
@@ -255,8 +257,8 @@ def borrowersummary():
     connection = getCursor()
     connection.execute("""
     SELECT br.borrowerid, concat(br.firstname,+' ',+br.familyname ) AS Name, count(l.loanid) AS LoanNumbers
-    FROM library.loans l
-    INNER JOIN library.borrowers br ON br.borrowerid = l.borrowerid
+    FROM loans l
+    INNER JOIN borrowers br ON br.borrowerid = l.borrowerid
     GROUP BY l.borrowerid
     ORDER BY br.borrowerid; """)
     borrowersummary = connection.fetchall()
