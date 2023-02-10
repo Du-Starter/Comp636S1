@@ -29,8 +29,6 @@ Furthermore, an example given by Stuart is a SQL statement with one variable whi
 ![searchborrower](/image/borrower.PNG "search Borrower")
 
 
-
-### Conclusion
 The process of uploading from local to GitHub was relatively smooth, but there was a problem when uploading from GitHub to PythonAnywhere. In this process, an error occurred that the server could not find the schema, and I couldn't figure out where the problem was for a long time, and finally found that the problem was that my local SQL statements were all library.books, but this is not used for PA, because the environment is not certain.
 The next content is discussing returned books on the web, I need an interface to enter bookcopyid, then another path jumps to the original page, these two first pages need to be connected to the second route to execute SQL statements.
 
