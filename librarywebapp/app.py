@@ -260,7 +260,7 @@ def borrowersummary():
     FROM loans l
     INNER JOIN borrowers br ON br.borrowerid = l.borrowerid
     GROUP BY l.borrowerid
-    ORDER BY br.borrowerid; """)
+    ORDER BY br.borrowerid;""")
     borrowersummary = connection.fetchall()
     return render_template("borrowersummary.html", borrowerSummary=borrowersummary)
 
