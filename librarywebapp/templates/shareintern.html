@@ -88,33 +88,19 @@
         <li>
           <a href="{{ url_for('loansummary') }}">Loan Summary</a>
         </li>
+        <!-- Drop down menu start -->
         <li class="nav-item dropdown">
-          <a
-            class="nav-link dropdown-toggle"
-            href="#"
-            role="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            Borrower Center
+          <a class="nav-link dropdown-toggle" href="{{ url_for('searchborrowers') }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Borrower Admin
           </a>
           <ul class="dropdown-menu">
-            <li>
-              <a class="dropdown-item" href="{{ url_for('addborrower') }}"
-                >Add Borrower</a
-              >
-            </li>
-            <li>
-              <a class="dropdown-item" href="{{ url_for('editborrower') }}"
-                >Edit Borrower</a
-              >
-            </li>
-            <li>
-              <a class="dropdown-item" href="{{ url_for('searchborrower') }}"
-                >Search Borrower</a
-              >
-            </li>
+            <li><a class="dropdown-item" href="{{ url_for('listborrowers') }}">Edit Borrower</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('addborrower') }}">Add Borrower</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{{ url_for('searchborrowers') }}">Search Borrower</a></li>
           </ul>
+        </li>
+        <!-- dorp down menu end -->
         </li>
         <li>
           <a href="{{ url_for('searchinternal') }}">Search</a>

@@ -32,19 +32,185 @@
       <th>Town</th>
       <th>City</th>
       <th>Postal Code</th>
+      <th>Operate</th>
     </tr>
   </thead>
 
   <tbody>
+    {% for book in borrowerlist %}
     <tr>
-      <!-- execute for loop statement and organsied the format -->
-      {% for book in borrowerlist %}
+      <td>{{ book[0] }}</td>
+      <td>{{ book[1] }}</td>
+      <td>{{ book[2] }}</td>
+      <td>{{ book[3] }}</td>
+      <td>{{ book[4] }}</td>
+      <td>{{ book[5] }}</td>
+      <td>{{ book[6] }}</td>
+      <td>{{ book[7] }}</td>
+      <td>{{ book[8] }}</td>
+      <td>
+        <button
+          type="button"
+          class="btn btn-success"
+          data-bs-toggle="modal"
+          data-bs-target="#update_book_{{book[0]}}"
+        >
+          Update
+        </button>
+      </td>
     </tr>
-    <tr>
-      {% for entry in book %}
-      <td>{{entry}}</td>
-      {% endfor %}
-    </tr>
+    <div
+      class="modal fade"
+      id="update_book_{{book[0]}}"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="basicModal"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-hidden="true"
+            >
+              &times;
+            </button>
+            <h4 class="modal-title" id="myModalLabel">Update Borrower</h4>
+          </div>
+          <form action="{{ url_for('edit') }}" method="POST" name="borrower">
+            <div class="modal-body">
+              <div class="form-group row">
+                <label for="borrowerid" class="col-xs-2 control-label"
+                  >Borrower ID</label
+                >
+                <div class="col-xs-10">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="borrowerid"
+                    value="{{book[0]}}"
+                    readonly
+                  />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="firstname" class="col-xs-2 control-label"
+                  >First Name</label
+                >
+                <div class="col-xs-10">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="firstname"
+                    value="{{book[1]}}"
+                  />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="familyname" class="col-xs-2 control-label"
+                  >Family Name</label
+                >
+                <div class="col-xs-10">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="familyname"
+                    value="{{book[2]}}"
+                  />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="dateofbirth" class="col-xs-2 control-label"
+                  >Date of Birth</label
+                >
+                <div class="col-xs-10">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="dateofbirth"
+                    value="{{book[3]}}"
+                  />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="housenumbername" class="col-xs-2 control-label"
+                  >House Number</label
+                >
+                <div class="col-xs-10">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="housenumbername"
+                    value="{{book[4]}}"
+                  />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="street" class="col-xs-2 control-label"
+                  >Street</label
+                >
+                <div class="col-xs-10">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="street"
+                    value="{{book[5]}}"
+                  />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="town" class="col-xs-2 control-label">Town</label>
+                <div class="col-xs-10">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="town"
+                    value="{{book[6]}}"
+                  />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="city" class="col-xs-2 control-label">City</label>
+                <div class="col-xs-10">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="city"
+                    value="{{book[7]}}"
+                  />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="postalcode" class="col-xs-2 control-label"
+                  >Postal Code</label
+                >
+                <div class="col-xs-10">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="postalcode"
+                    value="{{book[8]}}"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-default"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="submit" class="btn btn-success">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
     {% endfor %}
     <!-- for loop end -->
   </tbody>

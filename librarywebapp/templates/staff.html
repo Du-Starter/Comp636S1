@@ -52,6 +52,7 @@
   </head>
 
   <body>
+    <!-- nav bar start -->
     <nav>
       <h2>
         <a class="navbar-brand" href="{{ url_for('staff') }}"
@@ -85,41 +86,43 @@
         <li>
           <a href="{{ url_for('loansummary') }}">Loan Summary</a>
         </li>
-
+        <!-- Drop menu start -->
         <li class="nav-item dropdown">
           <a
             class="nav-link dropdown-toggle"
-            href="#"
+            href="{{ url_for('searchborrowers') }}"
             role="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            Borrower Center
+            Borrower Admin
           </a>
           <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" href="{{ url_for('listborrowers') }}"
+                >Edit Borrower</a
+              >
+            </li>
             <li>
               <a class="dropdown-item" href="{{ url_for('addborrower') }}"
                 >Add Borrower</a
               >
             </li>
+            <li><hr class="dropdown-divider" /></li>
             <li>
-              <a class="dropdown-item" href="{{ url_for('editborrower') }}"
-                >Edit Borrower</a
-              >
-            </li>
-            <li>
-              <a class="dropdown-item" href="{{ url_for('searchborrower') }}"
+              <a class="dropdown-item" href="{{ url_for('searchborrowers') }}"
                 >Search Borrower</a
               >
             </li>
           </ul>
         </li>
+        <!-- Drop menu ends -->
         <li>
           <a href="{{ url_for('searchinternal') }}">Search</a>
         </li>
       </ul>
     </nav>
-    <!--  -->
+    <!-- Nav bar ends -->
     <div
       id="carouselExampleSlidesOnly"
       class="carousel slide"

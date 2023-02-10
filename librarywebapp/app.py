@@ -48,28 +48,26 @@ def home():
 def listbooks():
     connection = getCursor()
     connection.execute("""SELECT b.bookid, b.booktitle,b.author,b.category,b.description,l.returned,l.loandate 
-    FROM books b 
-    JOIN bookcopies bc 
-    ON b.bookid=bc.bookid
-	JOIN loans l 
-    ON bc.bookcopyid=l.bookcopyid ;""")
+    FROM library.books b 
+    INNER JOIN library.bookcopies bc ON b.bookid=bc.bookid
+	INNER JOIN library.loans l ON bc.bookcopyid=l.bookcopyid ;""")
     bookList = connection.fetchall()
     print(bookList)
-    return render_template("booklist.html", booklist=bookList)
+    return render_template("booklist.html", booklist=bookList)  # booklist.html
 
 
-@app.route("/loanbook")
-def loanbook():
-    todaydate = datetime.now().date()
-    connection = getCursor()
-    connection.execute("SELECT * FROM borrowers;")
-    borrowerList = connection.fetchall()
-    sql = """SELECT * FROM bookcopies
-    inner join books on books.bookid = bookcopies.bookid
-    WHERE bookcopyid not in (SELECT bookcopyid from loans where returned <> 1 or returned is NULL);"""
-    connection.execute(sql)
-    bookList = connection.fetchall()
-    return render_template("addloan.html", loandate=todaydate, borrowers=borrowerList, books=bookList)
+# @app.route("/loanbook")
+# def loanbook():
+#     todaydate = datetime.now().date()
+#     connection = getCursor()
+#     connection.execute("SELECT * FROM borrowers;")
+#     borrowerList = connection.fetchall()
+#     sql = """SELECT * FROM bookcopies
+#     INNER JOIN books on books.bookid = bookcopies.bookid
+#     WHERE bookcopyid not in (SELECT bookcopyid from loans where returned <> 1 or returned is NULL);"""
+#     connection.execute(sql)
+#     bookList = connection.fetchall()
+#     return render_template("addloan.html", loandate=todaydate, borrowers=borrowerList, books=bookList)
 
 
 @app.route("/loan/add", methods=["POST"])
@@ -86,13 +84,13 @@ def addloan():
 @app.route("/currentloans")
 def currentloans():
     connection = getCursor()
-    sql = """ select br.borrowerid, br.firstname, br.familyname,  
+    sql = """ SELECT br.borrowerid, br.firstname, br.familyname,  
                 l.borrowerid, l.bookcopyid, l.loandate, l.returned, b.bookid, b.booktitle, b.author, 
                 b.category, b.yearofpublication, bc.format 
-            from books b
-                inner join bookcopies bc on b.bookid = bc.bookid
-                    inner join loans l on bc.bookcopyid = l.bookcopyid
-                        inner join borrowers br on l.borrowerid = br.borrowerid
+                FROM books b
+                INNER JOIN bookcopies bc on b.bookid = bc.bookid
+                INNER JOIN loans l on bc.bookcopyid = l.bookcopyid
+                INNER JOIN borrowers br on l.borrowerid = br.borrowerid
             order by br.familyname, br.firstname, l.loandate;"""
     connection.execute(sql)
     loanList = connection.fetchall()
@@ -133,7 +131,7 @@ def loansummary():
     ON b.bookid = bc.bookid
     LEFT JOIN loans l
     ON l.bookcopyid = bc.bookcopyid
-    GROUP BY b.bookid,b.booktitle
+    GROUP BY b.bookid, b.booktitle
     ORDER BY MostLoanBooks DESC;"""
     connection.execute(sql)
     loansummary = connection.fetchall()
@@ -156,34 +154,31 @@ def add():
     city = request.form.get("city")
     postalcode = request.form.get("postalcode")
     cur = getCursor()
-    cur.execute("INSERT INTO borrowers (firstname, familyname, dateofbirth, housenumbername, street, town, city, postalcode) VALUES(%s,%s,%s,%s,%s,%s,%s,%s);",
+    cur.execute("""INSERT INTO borrowers (firstname, familyname, dateofbirth, housenumbername, street, town, city, postalcode) 
+                VALUES(%s,%s,%s,%s,%s,%s,%s,%s);""",
                 (firstname, familyname, dateofbirth, housenumbername, street, town, city, postalcode,))
     return redirect("/listborrowers")
 
 
-@app.route("/editborrower")
-def editborrower():
-    return render_template("editborrower.html")
-
-# 如何将一些columns为空还可以继续进行，borrowerid required
-
-
 @app.route("/edit", methods=["POST"])
 def edit():
-    first_name = request.form.get("firstname")
-    family_name = request.form.get("familyname")
-    date_of_birth = request.form.get("dateofbirth")
-    house_number_name = request.form.get("housenumbername")
-    street_edit = request.form.get("street")
-    town_edit = request.form.get("town")
-    city_edit = request.form.get("city")
-    postalcode_edit = request.form.get("postalcode")
-    borrowerid_edit = request.form.get("borrowerid")
+    firstname = request.form.get("firstname")
+    print(firstname)
+    familyname = request.form.get("familyname")
+    print(familyname)
+    dateofbirth = request.form.get("dateofbirth")
+    housenumbername = request.form.get("housenumbername")
+    street = request.form.get("street")
+    town = request.form.get("town")
+    city = request.form.get("city")
+    postalcode = request.form.get("postalcode")
+    borrowerid = request.form.get("borrowerid")
+    print(borrowerid)
     cur = getCursor()
-    cur.execute("""Update borrowers 
-    SET firstname = %s, familyname = %s, dateofbirth = %s, housenumbername = %s, street = %s, town = %s, city = %s, postalcode = %s
-    WHERE borrowerid = %s;""",
-                (first_name, family_name, date_of_birth, house_number_name, street_edit, town_edit, city_edit, postalcode_edit, borrowerid_edit))
+    cur.execute("""UPDATE borrowers 
+    SET firstname = %s, familyname = %s, dateofbirth = %s, housenumbername = %s,
+    street= %s, town = %s, city = %s, postalcode = %s WHERE borrowerid = %s;""",
+                (firstname, familyname, dateofbirth, housenumbername, street, town, city, postalcode, borrowerid))
     return redirect("/listborrowers")
 
 
@@ -202,32 +197,30 @@ def searchstaff():
     connection.execute(
         """SELECT * FROM books
                        WHERE booktitle LIKE %s OR author LIKE %s""", (booktitle, author,))
-    bookList = connection.fetchall()
-    print(bookList)
-    return render_template("staffbooklist.html", booklist=bookList)
+    staffbookList = connection.fetchall()
+    print(staffbookList)
+    return render_template("staffbooklist.html", staffbooklist=staffbookList)
 
 
-@app.route("/searchborrower")
-def searchborrower():
-    return render_template("searchborrowers.html")
-
-
-@app.route("/searchborrowers", methods=["POST"])
+@app.route("/searchborrowers", methods=["POST", "GET"])
 def searchborrowers():
-    borrower_firstname = request.form.get("search")
-    borrower_familyname = request.form.get("search")
-    borrower_borrowerid = request.form.get("search")
-    borrower_firstname = "%" + borrower_firstname + "%"
-    borrower_familyname = "%" + borrower_familyname + "%"
-    borrower_borrowerid = "%" + borrower_borrowerid + "%"
-    connection = getCursor()
-    connection.execute(
-        """SELECT * FROM borrowers
-        WHERE firstname LIKE %s OR familyname LIKE %s OR borrowerid LIKE %s
-                       """, (borrower_firstname, borrower_familyname, borrower_borrowerid,))
-    borrowerList = connection.fetchall()
-    print(borrowerList)
-    return render_template("borrowerlist.html", borrowerlist=borrowerList)
+    if request.method == "GET":
+        return render_template("searchborrowers.html")
+    else:
+        borrower_firstname = request.form.get("search")
+        borrower_familyname = request.form.get("search")
+        borrower_borrowerid = request.form.get("search")
+        borrower_firstname = "%" + borrower_firstname + "%"
+        borrower_familyname = "%" + borrower_familyname + "%"
+        borrower_borrowerid = "%" + borrower_borrowerid + "%"
+        connection = getCursor()
+        connection.execute(
+            """SELECT * FROM borrowers
+            WHERE firstname LIKE %s OR familyname LIKE %s OR borrowerid LIKE %s
+                        """, (borrower_firstname, borrower_familyname, borrower_borrowerid,))
+        borrowerList = connection.fetchall()
+        print(borrowerList)
+        return render_template("borrowerlist.html", borrowerlist=borrowerList)
 
 
 @app.route("/listborrowers")
@@ -242,13 +235,17 @@ def listborrowers():
 def overdue():
     connection = getCursor()
     connection.execute("""
-    SELECT (datediff(curdate(),loandate) -28) AS OverDue, concat( br.firstname,+ " " ,+br.familyname ) AS Name, 
-    l.loandate AS LoanDate,  DATE_ADD(l.loandate, INTERVAL 28 DAY) AS DueDate, b.booktitle, bc.format 
-    FROM loans l
-    LEFT JOIN bookcopies bc ON bc.bookcopyid = l.bookcopyid
-    INNER JOIN books b ON b.bookid = bc.bookid
-    INNER JOIN borrowers br ON br.borrowerid = l.borrowerid
-    WHERE ((bc.format NOT IN ('eBook', 'Audio Book')) AND (l.returned = 0) AND (datediff(curdate(),l.loandate) > 35)); """)
+    SELECT br.borrowerid, concat(firstname,+ ' ',+familyname) As Name, b.booktitle, bc.format, loandate + interval 35 day as duedate, 
+    timestampdiff(day, loandate + interval 35 day, now()) as overdays 
+    FROM borrowers br
+    INNER JOIN loans l
+    ON br.borrowerid = l.borrowerid 
+    INNER JOIN bookcopies bc
+    ON bc.bookcopyid = l.bookcopyid
+    INNER JOIN books b
+    ON b.bookid=bc.bookid
+    WHERE loandate + interval 35 day < now() and returned =0 
+    ORDER BY br.borrowerid DESC; """)
     overdue = connection.fetchall()
     return render_template("overdue.html", overDue=overdue)
 
@@ -258,8 +255,8 @@ def borrowersummary():
     connection = getCursor()
     connection.execute("""
     SELECT br.borrowerid, concat(br.firstname,+' ',+br.familyname ) AS Name, count(l.loanid) AS LoanNumbers
-    FROM loans l
-    INNER JOIN borrowers br ON br.borrowerid = l.borrowerid
+    FROM library.loans l
+    INNER JOIN library.borrowers br ON br.borrowerid = l.borrowerid
     GROUP BY l.borrowerid
     ORDER BY br.borrowerid; """)
     borrowersummary = connection.fetchall()
@@ -278,9 +275,9 @@ def returnloanbook():
     bookcopyid = request.form.get("bookcopyid")
     connection = getCursor()
     connection.execute("""UPDATE loans l 
-    INNER JOIN bookcopies bc
-    ON l.bookcopyid = bc.bookcopyid
-    SET returned = 1 WHERE bc.bookcopyid = %s;""", (bookcopyid,))
+            INNER JOIN bookcopies bc
+            ON l.bookcopyid=bc.bookcopyid
+            SET returned = 1 WHERE bc.bookcopyid = %s;""", (bookcopyid,))
     print(bookcopyid)
     return redirect("staff")
 
@@ -291,9 +288,13 @@ def issuebook():
     connection = getCursor()
     connection.execute("SELECT * FROM borrowers;")
     borrowerList = connection.fetchall()
-    sql = """SELECT * FROM bookcopies
-    inner join books on books.bookid = bookcopies.bookid
-    WHERE bookcopyid not in (SELECT bookcopyid from loans where returned <> 1 or returned is NULL);"""
+    sql = """SELECT * 
+    from bookcopies bc 
+    INNER JOIN books b 
+    ON b.bookid = bc.bookid 
+    WHERE bookcopyid not in 
+    (SELECT bookcopyid FROM loans 
+    WHERE returned <>1 or returned is null) or format in ('eBook', 'Audio Book')"""
     connection.execute(sql)
     bookList = connection.fetchall()
     return render_template("addloan.html", loandate=todaydate, borrowers=borrowerList, books=bookList)
@@ -309,8 +310,14 @@ def stafflistbooks():
     connection = getCursor()
     connection.execute("""SELECT b.bookid, b.booktitle,b.author,b.category,b.description,l.returned,l.loandate 
     FROM books b 
-    JOIN bookcopies bc ON b.bookid=bc.bookid
-	JOIN loans l ON bc.bookcopyid=l.bookcopyid ;""")
+    JOIN bookcopies bc 
+    ON b.bookid=bc.bookid
+	JOIN loans l 
+    ON bc.bookcopyid=l.bookcopyid ;""")
     staffbookList = connection.fetchall()
     print(staffbookList)
     return render_template("staffbooklist.html", staffbooklist=staffbookList)
+
+
+if __name__ == "__main__":
+    app.run(debug=True)

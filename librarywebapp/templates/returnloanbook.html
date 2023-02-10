@@ -1,13 +1,16 @@
 {% extends "shareintern.html" %} {% block content %}
+<style>
+  form {
+    text-align: center;
+  }
+</style>
 <!-- book id  form begins -->
 <form action="{{ url_for('returnloanbook') }}" method="post">
   <label for="returnloanbook" class="form-label" name="bookcopyid"
-    >Please type the bookcopyid:
+    ><b>Please type the bookcopyid: </b>
   </label>
-  <input type="text" id="returnloanbook" name="bookcopyid" />
+  <input type="number" id="returnloanbook" name="bookcopyid" />
   <button type="submit">Submit</button>
 </form>
 <!-- book id  form ends -->
 {% endblock %}
-
-<!-- onkeyup="this.value=this.value.replace(/\D/g,'')" -->
